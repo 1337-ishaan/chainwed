@@ -168,7 +168,6 @@ const SendNftRingForm = (): JSX.Element => {
     setIsSubmitting(true);
     try {
       await mintNft();
-      storeInDb();
     } catch (error: any) {
       console.warn(error);
       if (error?.code === 4001 && error?.message === 'User rejected the request.') {
