@@ -158,8 +158,10 @@ const DivorceForm = (): JSX.Element => {
     }
   };
   React.useEffect(() => {
-    navigate('/');
-    toast.success('Divorce will be successfully completed when the other person also signs and divorces');
+    if (divorceData?.hash) {
+      navigate('/');
+      toast.success('Divorce will be successfully completed when the other person also signs and divorces');
+    }
   }, [divorceData?.hash]);
 
   const snap = useSnapshot(state);
