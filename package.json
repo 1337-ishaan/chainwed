@@ -1,0 +1,86 @@
+{
+  "name": "wedsol",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
+    "@rainbow-me/rainbowkit": "^1.0.11",
+    "@supabase/supabase-js": "^2.38.0",
+    "@types/node": "^20.5.9",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/styled-components": "^5.1.26",
+    "@types/uuid": "^9.0.3",
+    "axios": "^1.5.0",
+    "buffer": "^6.0.3",
+    "clsx": "^2.0.0",
+    "cross-env": "^7.0.3",
+    "date-fns": "^2.30.0",
+    "millify": "^6.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.46.1",
+    "react-icons": "^4.11.0",
+    "react-is": "^18.2.0",
+    "react-qr-code": "^2.0.12",
+    "react-router-dom": "^6.15.0",
+    "react-scripts": "5.0.1",
+    "styled-components": "^6.0.7",
+    "typescript": "^5.2.2",
+    "use-clipboard-copy": "^0.2.0",
+    "uuid": "^9.0.0",
+    "valtio": "^1.11.2",
+    "viem": "1.10.8",
+    "view": "^1.1.1",
+    "wagmi": "^1.4.1",
+    "yup": "^1.2.0"
+  },
+  "scripts": {
+    "start": "cross-env CI=false REACT_APP_ENV=local react-scripts start",
+    "dev": "GENERATE_SOURCEMAP=false cross-env CI=false REACT_APP_ENV=local react-scripts start",
+    "start:staging": "cross-env CI=false REACT_APP_ENV=staging react-scripts start",
+    "start:prod": "cross-env CI=false REACT_APP_ENV=production react-scripts start",
+    "build": "cross-env CI=false REACT_APP_ENV=production react-scripts build",
+    "build:local": "cross-env CI=false REACT_APP_ENV=local react-scripts build",
+    "build:staging": "cross-env CI=false REACT_APP_ENV=staging react-scripts build",
+    "build:production": "cross-env CI=false REACT_APP_ENV=production react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "no-restricted-imports": [
+        "error",
+        {
+          "paths": [
+            {
+              "name": "styled-components",
+              "message": "Please import from styled-components/macro."
+            }
+          ],
+          "patterns": [
+            "!styled-components/macro"
+          ]
+        }
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "babel-plugin-styled-components": "^2.1.4"
+  }
+}
