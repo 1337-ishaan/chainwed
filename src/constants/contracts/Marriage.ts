@@ -1,10 +1,41 @@
 export const Marriage: any = {
-  contractAddress: '0xdf3BC3AFA0BcdB5120D1144A1784D3D1363d22aC',
+  contractAddress: '0x1De75f5ac74E3e6238Ca63c557A8854357c3003B',
   abi: [
     {
-      inputs: [],
+      inputs: [
+        {
+          internalType: 'string',
+          name: 'name',
+          type: 'string',
+        },
+        {
+          internalType: 'string',
+          name: 'symbol',
+          type: 'string',
+        },
+        {
+          internalType: 'uint256',
+          name: 'chainID',
+          type: 'uint256',
+        },
+        {
+          internalType: 'address',
+          name: 'systemContractAddress',
+          type: 'address',
+        },
+      ],
       stateMutability: 'nonpayable',
       type: 'constructor',
+    },
+    {
+      inputs: [],
+      name: 'SenderNotSystemContract',
+      type: 'error',
+    },
+    {
+      inputs: [],
+      name: 'WrongChain',
+      type: 'error',
     },
     {
       anonymous: false,
@@ -92,12 +123,44 @@ export const Marriage: any = {
         },
         {
           indexed: false,
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+      ],
+      name: 'BtcPaymentReceived',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'uint256',
+          name: 'marriageId',
+          type: 'uint256',
+        },
+        {
+          indexed: false,
           internalType: 'address',
           name: 'initiator',
           type: 'address',
         },
       ],
       name: 'Divorce',
+      type: 'event',
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: 'uint256',
+          name: 'marriageId',
+          type: 'uint256',
+        },
+      ],
+      name: 'EngagementProposal',
       type: 'event',
     },
     {
@@ -269,6 +332,19 @@ export const Marriage: any = {
       type: 'function',
     },
     {
+      inputs: [],
+      name: 'chain',
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
       inputs: [
         {
           internalType: 'uint256',
@@ -389,6 +465,51 @@ export const Marriage: any = {
       type: 'function',
     },
     {
+      inputs: [
+        {
+          components: [
+            {
+              internalType: 'bytes',
+              name: 'origin',
+              type: 'bytes',
+            },
+            {
+              internalType: 'address',
+              name: 'sender',
+              type: 'address',
+            },
+            {
+              internalType: 'uint256',
+              name: 'chainID',
+              type: 'uint256',
+            },
+          ],
+          internalType: 'struct zContext',
+          name: 'context',
+          type: 'tuple',
+        },
+        {
+          internalType: 'address',
+          name: 'zrc20',
+          type: 'address',
+        },
+        {
+          internalType: 'uint256',
+          name: 'amount',
+          type: 'uint256',
+        },
+        {
+          internalType: 'bytes',
+          name: 'message',
+          type: 'bytes',
+        },
+      ],
+      name: 'onCrossChainCall',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
       inputs: [],
       name: 'owner',
       outputs: [
@@ -429,8 +550,27 @@ export const Marriage: any = {
         },
       ],
       name: 'proposeMarriage',
-      outputs: [],
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
       stateMutability: 'nonpayable',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'uint256',
+          name: 'marriageId',
+          type: 'uint256',
+        },
+      ],
+      name: 'receiveBtcPayment',
+      outputs: [],
+      stateMutability: 'payable',
       type: 'function',
     },
     {
@@ -554,6 +694,19 @@ export const Marriage: any = {
           internalType: 'string',
           name: '',
           type: 'string',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'systemContract',
+      outputs: [
+        {
+          internalType: 'contract SystemContract',
+          name: '',
+          type: 'address',
         },
       ],
       stateMutability: 'view',

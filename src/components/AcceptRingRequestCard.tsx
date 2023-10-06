@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import QRCode from 'react-qr-code';
 import { useNavigate } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
-
+import { toast } from 'react-toastify';
 import { state } from 'state';
 
 import FlexColumnWrapper from 'components/common/wrappers/FlexColumnWrapper';
@@ -199,16 +199,17 @@ AcceptRingRequestCardProps): JSX.Element => {
     address: Marriage.contractAddress,
     abi: Marriage.abi,
     functionName: 'acceptProposal',
-    args: [1],
+    args: [+proposalPubKey],
     // to change estateId
     enabled: !!address,
     onSuccess(data) {
-      console.log('on apd succ', data);
+      updateProposalInDb();
     },
-    onError(err) {
-      console.log('on error  sent', err);
+    onError(err: any) {
+      toast.error(err);
     },
   });
+
   const {
     data: acceptProposalData,
     writeAsync: acceptProposal,
@@ -220,16 +221,24 @@ AcceptRingRequestCardProps): JSX.Element => {
     const { data, error } = await supabase
       .from('proposals')
       .update({ status: 'Married' })
-      .eq('id', proposalPubKey)
+      .eq('marriageId', proposalPubKey)
       .select();
+    if (data) {
+      // navigate(`/marriage/${proposalPubKey}`);
+    }
+
     setIsSubmitting(false);
-    console.log(data, 'supabase data', error, 'supabase error;');
   };
   const storeAcceptance = async () => {
     setIsSubmitting(true);
     await acceptProposal?.();
-    updateProposalInDb();
   };
+
+  React.useEffect(() => {
+    if (acceptProposalData?.hash) {
+      navigate(`/marriage/${proposalPubKey}`);
+    }
+  }, [acceptProposalData?.hash]);
 
   return (
     <AcceptRingRequestCardWrapper className={clsx(className)}>

@@ -14,11 +14,12 @@ import BlockConfirmations from './BlockConfirmations';
 import ViewOnExplorer from './ViewOnExplorer';
 import SolidButton from './common/SolidButton';
 import shortenWalletAddress from 'utils/shortenWalletAddress';
+import SendBitcoin from './SendBitcoin';
 
 const MarriageInfoCardWrapper = styled.div`
   width: 100%;
   max-width: 265px;
-  min-height: 283px;
+  min-height: fit-content;
 
   background: #ffffff;
   box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.16);
@@ -169,29 +170,25 @@ const MarriageInfoCard = ({
         confirmedBlocks={Math.ceil(Math.random() * 290)}
         totalBlocks={290}
       />
-      <FlexColumnWrapper>
+      {/* <FlexColumnWrapper>
         <FlexRowWrapper>
           <p>Contract</p>
         </FlexRowWrapper>
         <FlexRowWrapper>
           <MdContentCopy />
-          {/* <p>{shortenWalletAddress(config.programId, 10)}</p> */}
+          <p>{shortenWalletAddress('0x64627c96aB9d0a24B8bAA3F53336cbb39Bc6A55a', 10)}</p>
         </FlexRowWrapper>
-      </FlexColumnWrapper>
+      </FlexColumnWrapper> */}
       {/* {showViewOnExplorer ? (
         <ViewOnExplorer
           className="view-on-explorer"
-          href={`https://explorer.solana.com/address/${config.programId}?cluster=${config.solanaNetwork}`}
+          href={`https://zetascan.com`}
           target="_blank"
           rel="noopener noreferrer"
         />
       ) : null} */}
-      {showBlessButton ? (
-        <SolidButton className="solid-button" style={{ cursor: 'not-allowed' }}>
-          <FaWallet />
-          Send $ZETA to Bless
-        </SolidButton>
-      ) : null}
+      {showBlessButton ? <SendBitcoin className="solid-button" /> : null}
+      <br />
       {showFileDivorceButton ? (
         <SolidButton className="solid-button red" onClick={() => navigate(`/divorce/${proposalPubKey}`)}>
           <AiOutlineDelete />

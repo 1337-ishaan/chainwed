@@ -8,6 +8,8 @@ import { state } from 'state';
 import SectionTitle from 'components/common/SectionTitle';
 import ConnectWalletButton from 'components/ConnectWalletButton';
 import SolidButton from 'components/common/SolidButton';
+import { useAccount } from 'wagmi';
+import React from 'react';
 
 const LandingWrapper = styled.main`
   width: 100%;
@@ -43,11 +45,16 @@ const LandingWrapper = styled.main`
 const Landing = (): JSX.Element => {
   const navigate = useNavigate();
   const snap = useSnapshot(state);
-
+  const { address } = useAccount();
+  React.useEffect(() => {
+    if (address) {
+      // navigate('/proposal');
+    }
+  }, []);
   return (
     <LandingWrapper>
       <SectionTitle className="section-title">Blockchain Marriage Certificates</SectionTitle>
-      {snap.isWalletConnected ? (
+      {address ? (
         <SolidButton
           className="solid-button"
           onClick={() => {

@@ -143,7 +143,7 @@ const MarriagePreview = ({
           <p>engaged on {format(new Date(engagementDate ?? Date().toString()), 'dd/MM/yyyy')}</p>
         </FlexRowWrapper>
         <FlexRowWrapper className="row-4">
-          <p>In accordance of the following vows</p>
+          <p>In accordance of the marriage vows</p>
         </FlexRowWrapper>
         <FlexRowWrapper className="row-5">
           <FlexColumnWrapper>

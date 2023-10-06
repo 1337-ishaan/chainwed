@@ -9,7 +9,7 @@ import shortenWalletAddress from 'utils/shortenWalletAddress';
 
 const BlessedByCardWrapper = styled.div`
   width: 100%;
-  min-height: 325px;
+  min-height: fit-content;
 
   background: #ffffff;
   box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.16);
@@ -125,7 +125,7 @@ const BlessedByCard = ({ className, blessings }: BlessedByCardProps): JSX.Elemen
                 <img src={accountPlaceholder} alt="" />
                 <p>{shortenWalletAddress(blessing.accountAddress, 5)}</p>
               </FlexRowWrapper>
-              <h4>{blessing.value}&nbsp;SOL</h4>
+              <h4>{blessing.value}&nbsp;tBTC</h4>
             </FlexRowWrapper>
           </FlexColumnWrapper>
         ))}

@@ -4,7 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { IoLink, IoLogoTwitter, IoLogoFacebook } from 'react-icons/io5';
 import { HiExternalLink } from 'react-icons/hi';
 import { useSnapshot } from 'valtio';
-
+import { toast } from 'react-toastify';
 import {
   state,
   setProposalInfoLoading,
@@ -26,6 +26,8 @@ import getAccountInfo from 'utils/getAccountInfo';
 import getActualSigners from 'utils/getActualSigners';
 import { fetchIpfsJsonData } from 'apis/ipfs';
 import ConnectWalletButton from 'components/ConnectWalletButton';
+import { supabase } from 'util/supabase';
+import { useAccount } from 'wagmi';
 
 const MarriageWrapper = styled.main`
   width: 100%;
@@ -93,6 +95,7 @@ const MarriageWrapper = styled.main`
   }
 
   & > ${Container} > ${FlexRowWrapper} > .col-2 {
+    margin-top: 44px;
     & > ${FlexRowWrapper} {
       justify-content: flex-end;
       margin-bottom: 32px;
@@ -121,13 +124,25 @@ const MarriageWrapper = styled.main`
 
 const Marriage = (): JSX.Element => {
   const snap = useSnapshot(state);
-
+  const { address } = useAccount();
   const { proposalPubKey } = useParams<{ proposalPubKey: string }>();
   const navigate = useNavigate();
 
+  const [proposal, setProposal] = React.useState<any>();
+
+  const getProposalById = async () => {
+    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('marriageId', proposalPubKey);
+    if (!error) {
+      setProposal(proposalData?.[0]);
+    }
+  };
+
   React.useEffect(() => {
     try {
-      (async () => {})();
+      (async () => {
+        toast.success("Congratulations to you guys! We're more than happy!");
+        getProposalById();
+      })();
     } catch (error) {
       console.log(error);
       setProposalInfoError(error);
@@ -147,7 +162,7 @@ const Marriage = (): JSX.Element => {
             <FlexRowWrapper>
               <SectionTitle className="section-title">Blockchain Wedding</SectionTitle>
               {/* <p>#2343343</p> */}
-              {snap.isWalletConnected ? (
+              {address ? (
                 <p>
                   <Link to="/assets">View Assets</Link>&nbsp;&nbsp;
                   <HiExternalLink />
@@ -158,11 +173,13 @@ const Marriage = (): JSX.Element => {
             </FlexRowWrapper>
             <FlexRowWrapper>
               <MarriageCertificate
-                proposerName={snap.proposalInfo.data?.proposerName ?? ''}
-                spouseName={snap.proposalInfo.data?.spouseName ?? ''}
-                engagementDate={snap.proposalInfo.data?.marriageDate ?? Date().toString()}
-                proposerVows={snap.proposalInfo.data?.proposerVows ?? ''}
-                spouseVows={snap.proposalInfo.data?.spouseVows ?? ''}
+                proposerName={proposal?.your_name ?? ''}
+                spouseName={proposal?.spouse_name ?? ''}
+                // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
+                // signedBy={proposal?.your_wallet ?? ''}
+                engagementDate={proposal?.created_at ?? Date().toString()}
+                proposerVows={'Accepted'}
+                spouseVows={'Accepted' ?? ''}
                 qrCodeString={window.location.href}
               />
             </FlexRowWrapper>
@@ -189,17 +206,19 @@ const Marriage = (): JSX.Element => {
             <BlessedByCard
               blessings={[
                 {
-                  message: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit offici',
-                  blessedBy: 'Mom & Dad',
+                  message:
+                    'Hey Dear, this seems like the smartest move you guys have evermade, I hope we had ChainWed during my marriage days :")',
+                  blessedBy: 'Dad',
                   accountAddress: 'FnPXxM4KsAbakgtAkXYVSvuQ8Pmv5b5eeP3APTPM6fhd',
-                  value: 15,
+                  value: 18,
                 },
-                {
-                  message: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit offici',
-                  blessedBy: 'Mom & Dad',
-                  accountAddress: 'FnPXxM4KsAbakgtAkXYVSvuQ8Pmv5b5eeP3APTPM6fhd',
-                  value: 15,
-                },
+                // {
+                //   message:
+                //     'Hey kiddos, very happy for you guys! Hope you have a great life ahead! Sending some digital gold, love you guys!',
+                //   blessedBy: 'Mom',
+                //   accountAddress: 'FnPXxM4KsAbakgtAkXYVSvuQ8Pmv5b5eeP3APTPM6fhd',
+                //   value: 21,
+                // },
               ]}
             />
           </FlexColumnWrapper>

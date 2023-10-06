@@ -19,6 +19,7 @@ import getPubKeyFromSeed from 'utils/getPubKeyFromSeed';
 import getAccountInfo from 'utils/getAccountInfo';
 import getActualSigners from 'utils/getActualSigners';
 import { fetchIpfsJsonData } from 'apis/ipfs';
+import SendBitcoin from 'components/SendBitcoin';
 
 const ProposalWrapper = styled.main`
   width: 100%;
@@ -44,7 +45,7 @@ const ProposalWrapper = styled.main`
 
 const Proposal = (): JSX.Element => {
   const [disableProposalFlow, setDisableProposalFlow] = React.useState(false);
-  const [disableMarriageFlow, setDisableMarriageFlow] = React.useState(false);
+  const [disableMarriageFlow, setDisableMarriageFlow] = React.useState(true);
 
   const snap = useSnapshot(state);
 

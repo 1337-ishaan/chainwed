@@ -53,9 +53,8 @@ const SuccessfullyMintedWrapper = styled.main`
 `;
 
 const SuccessfullyMinted = (): JSX.Element => {
-  const { proposalPubKey: proposalId } = useParams<{ proposalPubKey: string }>();
+  const { proposalPubKey } = useParams<{ proposalPubKey: string }>();
   const [proposal, setProposal] = React.useState<any>();
-  console.log(proposalId, 'proposal ID');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,6 +68,13 @@ const SuccessfullyMinted = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getProposalById = async () => {
+    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('marriageId', proposalPubKey);
+    if (!error) {
+      setProposal(proposalData?.[0]);
+    }
+  };
+
   console.log(location.state, 'location state');
 
   return (
@@ -79,7 +85,7 @@ const SuccessfullyMinted = (): JSX.Element => {
         <FlexRowWrapper>
           <FlexColumnWrapper>
             <div style={{ width: '100%', maxWidth: 455, margin: '0 auto' }}>
-              <CopyText className="copy-text" text={`${window.location.origin}/proposal/${proposalId}/accept`} />
+              <CopyText className="copy-text" text={`${window.location.origin}/proposal/${proposalPubKey}/accept`} />
               <BlockConfirmations
                 className="block-confirmations"
                 confirmedBlocks={Math.ceil(Math.random() * 290)}
@@ -94,8 +100,10 @@ const SuccessfullyMinted = (): JSX.Element => {
           </FlexColumnWrapper>
           <FlexColumnWrapper>
             <NftRingPreview
-              spouseName={location.state?.spouseName}
-              message={location.state?.message}
+              proposerName={proposal?.your_name ?? ''}
+              spouseName={proposal?.spouse_name ?? ''}
+              // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
+              message={proposal?.message}
               // ring={location.state?.ring}
             />
           </FlexColumnWrapper>

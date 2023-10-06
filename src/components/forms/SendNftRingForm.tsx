@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
+import { toast } from 'react-toastify';
 import Container from 'components/common/wrappers/Container';
 import FlexRowWrapper from 'components/common/wrappers/FlexRowWrapper';
 import FlexColumnWrapper from 'components/common/wrappers/FlexColumnWrapper';
@@ -113,7 +114,10 @@ const SendNftRingForm = (): JSX.Element => {
     // to change estateId
     enabled: isSubmitting,
     onSuccess(data) {
-      console.log('on successful proposal sent', data);
+      if (data) {
+        storeInDb(Number(data?.result!));
+        toast.success('Copy this link and share it across your to-be partner! Go for the gold!');
+      }
     },
     onError(err) {
       console.log('on error proposal sent', err);
@@ -131,23 +135,25 @@ const SendNftRingForm = (): JSX.Element => {
   const mintNft = async () => {
     console.log('mint nft');
     await sendProposal?.();
-    storeInDb();
+    // storeInDb();
   };
 
-  const storeInDb = async () => {
+  const storeInDb = async (marriageId: number) => {
     const { message, spouseName: spouse_name, spouseWallet: spouse_wallet, proposerName: your_name } = getValues();
     const { data, error } = await supabase
       .from('proposals')
       .insert([
-        { your_name, spouse_name, spouse_wallet, your_wallet: address, status: 'proposed', message, marriageId: 1 },
+        { your_name, spouse_name, spouse_wallet, your_wallet: address, status: 'proposed', message, marriageId },
       ])
       .select();
     if (error) {
       console.log('store db error: ', error);
       return;
     }
-    navigate(`/proposal/${data[0]?.id}/created`);
-    console.log(data, 'store db data');
+    if (data) {
+      navigate(`/proposal/${marriageId}/created`);
+      console.log(data, 'store db data');
+    }
   };
   const onSubmit = async (d: typeof defaultValues) => {
     setIsSubmitting(true);

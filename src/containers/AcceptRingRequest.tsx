@@ -52,7 +52,7 @@ const AcceptRingRequest = (): JSX.Element => {
   const [proposal, setProposal] = React.useState<any>();
 
   const getProposalById = async () => {
-    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('id', proposalPubKey);
+    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('marriageId', proposalPubKey);
     if (!error) {
       setProposal(proposalData?.[0]);
     }
@@ -74,9 +74,9 @@ const AcceptRingRequest = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // if (snap.proposalInfo.isLoading) {
-  //   return <FullPageSpinner />;
-  // }
+  if (!proposal) {
+    return <FullPageSpinner />;
+  }
 
   return (
     <AcceptRingRequestWrapper>
@@ -87,9 +87,7 @@ const AcceptRingRequest = (): JSX.Element => {
           proposerName={proposal?.your_name ?? ''}
           spouseName={proposal?.spouse_name ?? ''}
           // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
-          message={
-            'It"s great that we have found each other finally, lets take this journey to the moon together, I ape you <3'
-          }
+          message={proposal?.message}
           signedBy={proposal?.your_wallet ?? ''}
           // qrCodeString={window.location.href}
         />

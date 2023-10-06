@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '@rainbow-me/rainbowkit/styles.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { GlobalStyles } from 'components/common/styles/GlobalStyles';
 // rainbowkit
@@ -47,6 +49,7 @@ const App = () => {
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
           <GlobalStyles />
+          <ToastContainer />
           <React.Suspense fallback={null}>
             <BrowserRouter>
               <Navbar />

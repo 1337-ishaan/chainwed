@@ -12,6 +12,7 @@ import {
   setProposalInfoError,
   setAssetsData,
 } from 'state';
+import { toast } from 'react-toastify';
 
 import Container from 'components/common/wrappers/Container';
 import FlexRowWrapper from 'components/common/wrappers/FlexRowWrapper';
@@ -140,12 +141,10 @@ const DivorceForm = (): JSX.Element => {
     address: Marriage.contractAddress,
     abi: Marriage.abi,
     functionName: 'divorce',
-    args: [1],
+    args: [+proposalPubKey!],
     // to change estateId
     enabled: isSubmitting,
-    onSuccess(data) {
-      console.log('on successful proposal sent', data);
-    },
+    onSuccess(data) {},
     onError(err) {
       console.log('on error proposal sent', err);
     },
@@ -153,11 +152,15 @@ const DivorceForm = (): JSX.Element => {
   const { data: divorceData, writeAsync: divorce, isSuccess: isDivorceSuccess } = useContractWrite(marriageConfig);
 
   const getProposalById = async () => {
-    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('id', proposalPubKey);
+    let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('marriageId', proposalPubKey);
     if (!error) {
       setProposal(proposalData?.[0]);
     }
   };
+  React.useEffect(() => {
+    navigate('/');
+    toast.success('Divorce will be successfully completed when the other person also signs and divorces');
+  }, [divorceData?.hash]);
 
   const snap = useSnapshot(state);
 
@@ -165,7 +168,7 @@ const DivorceForm = (): JSX.Element => {
     const { data, error } = await supabase
       .from('proposals')
       .update({ status: 'Divorced' })
-      .eq('id', proposalPubKey)
+      .eq('marriageId', proposalPubKey)
       .select();
     console.log(data, 'supabase data', error, 'supabase error;');
   };
@@ -246,7 +249,7 @@ const DivorceForm = (): JSX.Element => {
           <FlexColumnWrapper className="col-2">
             <Container>
               <ProposalLink link={window.location.href} />
-              <h4 style={{ color: 'red' }}>Stay Strong! You should re-consider about this action </h4>
+              <h5 style={{ color: 'red', margin: '12px 0' }}>Stay Strong! You should re-consider about this action </h5>
               <SignerCard
                 className="signer-card"
                 signerName={proposal?.your_name ?? ''}
