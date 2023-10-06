@@ -117,6 +117,7 @@ const SendNftRingForm = (): JSX.Element => {
     onSuccess(data) {
       if (data) {
         setMid(Number(data?.result!));
+        storeInDb(Number(data?.result!));
         toast.success('Copy this link and share it across your to-be partner! Go for the gold!');
       }
     },
@@ -139,12 +140,20 @@ const SendNftRingForm = (): JSX.Element => {
     // storeInDb();
   };
 
-  const storeInDb = async () => {
+  const storeInDb = async (marId?: number) => {
     const { message, spouseName: spouse_name, spouseWallet: spouse_wallet, proposerName: your_name } = getValues();
     const { data, error } = await supabase
       .from('proposals')
       .insert([
-        { your_name, spouse_name, spouse_wallet, your_wallet: address, status: 'proposed', message, marriageId: mid },
+        {
+          your_name,
+          spouse_name,
+          spouse_wallet,
+          your_wallet: address,
+          status: 'proposed',
+          message,
+          marriageId: marId ?? mid,
+        },
       ])
       .select();
     if (error) {
@@ -171,10 +180,10 @@ const SendNftRingForm = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (sendProposalData?.hash && mid) {
+    if (mid) {
       navigate(`/proposal/${mid}/created`);
     }
-  }, [mid, sendProposalData?.hash]);
+  }, [mid]);
 
   return (
     <SendNftRingFormWrapper>
