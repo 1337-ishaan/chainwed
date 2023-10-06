@@ -100,6 +100,7 @@ const SendNftRingFormWrapper = styled.div`
 const SendNftRingForm = (): JSX.Element => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  const [mid, setMid] = React.useState<any>();
   const { register, watch, handleSubmit, setValue, getValues } = useForm({
     defaultValues,
     // resolver: yupResolver(validationSchema),
@@ -115,7 +116,7 @@ const SendNftRingForm = (): JSX.Element => {
     enabled: isSubmitting,
     onSuccess(data) {
       if (data) {
-        storeInDb(Number(data?.result!));
+        setMid(Number(data?.result!));
         toast.success('Copy this link and share it across your to-be partner! Go for the gold!');
       }
     },
@@ -138,12 +139,12 @@ const SendNftRingForm = (): JSX.Element => {
     // storeInDb();
   };
 
-  const storeInDb = async (marriageId: number) => {
+  const storeInDb = async () => {
     const { message, spouseName: spouse_name, spouseWallet: spouse_wallet, proposerName: your_name } = getValues();
     const { data, error } = await supabase
       .from('proposals')
       .insert([
-        { your_name, spouse_name, spouse_wallet, your_wallet: address, status: 'proposed', message, marriageId },
+        { your_name, spouse_name, spouse_wallet, your_wallet: address, status: 'proposed', message, marriageId: mid },
       ])
       .select();
     if (error) {
@@ -151,7 +152,6 @@ const SendNftRingForm = (): JSX.Element => {
       return;
     }
     if (data) {
-      navigate(`/proposal/${marriageId}/created`);
       console.log(data, 'store db data');
     }
   };
@@ -159,6 +159,7 @@ const SendNftRingForm = (): JSX.Element => {
     setIsSubmitting(true);
     try {
       await mintNft();
+      storeInDb();
     } catch (error: any) {
       console.warn(error);
       if (error?.code === 4001 && error?.message === 'User rejected the request.') {
@@ -168,6 +169,10 @@ const SendNftRingForm = (): JSX.Element => {
       setIsSubmitting(false);
     }
   };
+
+  React.useEffect(() => {
+    navigate(`/proposal/${mid}/created`);
+  }, [mid]);
 
   return (
     <SendNftRingFormWrapper>
@@ -198,5 +203,4 @@ const SendNftRingForm = (): JSX.Element => {
     </SendNftRingFormWrapper>
   );
 };
-
 export default SendNftRingForm;
