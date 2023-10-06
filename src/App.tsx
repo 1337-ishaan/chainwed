@@ -34,8 +34,8 @@ const Divorce = React.lazy(() => import('containers/Divorce'));
 const App = () => {
   const { chains, publicClient } = configureChains([goerli, zetachainAthensTestnet], [publicProvider()]);
   const { connectors } = getDefaultWallets({
-    appName: 'My RainbowKit App',
-    projectId: 'YOUR_PROJECT_ID',
+    appName: 'ChainWed',
+    projectId: 'af9877be5b6b4f0a4a7e849bbd2c046f',
     chains,
   });
   const wagmiConfig = createConfig({
