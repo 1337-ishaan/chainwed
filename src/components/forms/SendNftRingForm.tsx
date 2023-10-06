@@ -171,10 +171,10 @@ const SendNftRingForm = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (sendProposalData?.hash) {
+    if (sendProposalData?.hash && mid) {
       navigate(`/proposal/${mid}/created`);
     }
-  }, [sendProposalData?.hash]);
+  }, [mid, sendProposalData?.hash]);
 
   return (
     <SendNftRingFormWrapper>
