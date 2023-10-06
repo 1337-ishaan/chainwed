@@ -51,6 +51,7 @@ const Landing = (): JSX.Element => {
       // navigate('/proposal');
     }
   }, []);
+
   return (
     <LandingWrapper>
       <SectionTitle className="section-title">Blockchain Marriage Certificates</SectionTitle>
