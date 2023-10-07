@@ -15,6 +15,7 @@ import FormTextArea from 'components/form-elements/FormTextArea';
 import SolidButton from 'components/common/SolidButton';
 import RingSelect from 'components/form-elements/RingSelect';
 import Spinner from 'components/common/Spinner';
+import previewRing from '../../assets/images/preview-ring-1.png';
 
 import rings from 'components/common/rings';
 
@@ -118,7 +119,6 @@ const SendNftRingForm = (): JSX.Element => {
       if (data) {
         setMid(Number(data?.result!));
         storeInDb(Number(data?.result!));
-        toast.success('Copy this link and share it across your to-be partner! Go for the gold!');
       }
     },
     onError(err) {
@@ -129,9 +129,9 @@ const SendNftRingForm = (): JSX.Element => {
     data: sendProposalData,
     writeAsync: sendProposal,
     isSuccess: isSendProposalSuccess,
+    isLoading: isSendProposalLoading,
   } = useContractWrite(marriageConfig);
 
-  console.log(sendProposalData, isSendProposalSuccess, 'proposal data');
   const navigate = useNavigate();
 
   const mintNft = async () => {
@@ -142,6 +142,7 @@ const SendNftRingForm = (): JSX.Element => {
 
   const storeInDb = async (marId?: number) => {
     const { message, spouseName: spouse_name, spouseWallet: spouse_wallet, proposerName: your_name } = getValues();
+
     const { data, error } = await supabase
       .from('proposals')
       .insert([
@@ -179,10 +180,11 @@ const SendNftRingForm = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (mid) {
+    if (mid && isSendProposalSuccess) {
       navigate(`/proposal/${mid}/created`);
+      toast.success('Copy this link and share it across your to-be partner! Go for the gold!');
     }
-  }, [mid]);
+  }, [mid, isSendProposalSuccess]);
 
   return (
     <SendNftRingFormWrapper>
@@ -205,7 +207,9 @@ const SendNftRingForm = (): JSX.Element => {
             <h4>Preview</h4>
             <NftRingPreview
               spouseName={formValues[0]}
-              message={formValues[1]} //ring={formValues[2]}
+              message={formValues[1]}
+              ring={previewRing}
+              //ring={formValues[2]}
             />
           </FlexColumnWrapper>
         </FlexRowWrapper>

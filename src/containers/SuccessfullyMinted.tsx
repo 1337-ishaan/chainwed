@@ -15,6 +15,7 @@ import BlockConfirmations from 'components/BlockConfirmations';
 import CopyText from 'components/CopyText';
 import { supabase } from 'util/supabase';
 import { setProposalInfoData } from 'state';
+import previewRing from '../assets/images/preview-ring-1.png';
 
 const SuccessfullyMintedWrapper = styled.main`
   width: 100%;
@@ -61,10 +62,17 @@ const SuccessfullyMinted = (): JSX.Element => {
   // <{ proposalTransaction: string; spouseName: string; message: string; ring: number }>();
 
   React.useEffect(() => {
-    // getProposalById()
-    // if (!proposalPubKey!) {
-    //   navigate('/');
-    // }
+    try {
+      if (!proposalPubKey!) {
+        return navigate('/');
+      }
+
+      (async () => {
+        getProposalById();
+      })();
+    } catch (error) {
+      console.log(error);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,6 +80,7 @@ const SuccessfullyMinted = (): JSX.Element => {
     let { data: proposalData, error } = await supabase.from('proposals').select('*').eq('marriageId', proposalPubKey);
     if (!error) {
       setProposal(proposalData?.[0]);
+      console.log(proposalData?.[0], 'data');
     }
   };
 
@@ -104,7 +113,7 @@ const SuccessfullyMinted = (): JSX.Element => {
               spouseName={proposal?.spouse_name ?? ''}
               // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
               message={proposal?.message}
-              // ring={location.state?.ring}
+              ring={previewRing}
             />
           </FlexColumnWrapper>
         </FlexRowWrapper>

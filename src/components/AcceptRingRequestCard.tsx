@@ -186,7 +186,7 @@ const AcceptRingRequestCard = ({
   proposalPubKey,
   proposerName,
   spouseName,
-  // proposerRing,
+  proposerRing,
   message,
   signedBy,
 }: // qrCodeString,
@@ -200,7 +200,6 @@ AcceptRingRequestCardProps): JSX.Element => {
     abi: Marriage.abi,
     functionName: 'acceptProposal',
     args: [+proposalPubKey],
-    // to change estateId
     enabled: !!address,
     onSuccess(data) {
       updateProposalInDb();
@@ -247,9 +246,9 @@ AcceptRingRequestCardProps): JSX.Element => {
           <h4>Dear {spouseName}</h4>,
         </FlexRowWrapper>
         <FlexRowWrapper className="row-2">
-          {/* <FlexColumnWrapper>
+          <FlexColumnWrapper>
             <img src={proposerRing} alt="" />
-          </FlexColumnWrapper> */}
+          </FlexColumnWrapper>
           <FlexColumnWrapper>
             <p className="message">{message}</p>
             <h3>Yours, {proposerName}</h3>

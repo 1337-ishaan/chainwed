@@ -178,8 +178,13 @@ const Marriage = (): JSX.Element => {
                 // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
                 // signedBy={proposal?.your_wallet ?? ''}
                 engagementDate={proposal?.created_at ?? Date().toString()}
-                proposerVows={'Accepted'}
-                spouseVows={'Accepted' ?? ''}
+                proposerVows={
+                  'Our memories will forever be timestamped on the blockchain of our love. I promise to cherish every moment we create together and ensure they are never lost or forgotten.'
+                }
+                spouseVows={
+                  'As we exchange our digital vows on this blockchain, consider these words as our love tokens. I promise to accumulate and invest in our love daily, growing our digital wealth together.' ??
+                  ''
+                }
                 qrCodeString={window.location.href}
               />
             </FlexRowWrapper>

@@ -125,7 +125,7 @@ const BlessedByCard = ({ className, blessings }: BlessedByCardProps): JSX.Elemen
                 <img src={accountPlaceholder} alt="" />
                 <p>{shortenWalletAddress(blessing.accountAddress, 5)}</p>
               </FlexRowWrapper>
-              <h4>{blessing.value}&nbsp;tBTC</h4>
+              <h4>{blessing.value}&nbsp;BTC</h4>
             </FlexRowWrapper>
           </FlexColumnWrapper>
         ))}

@@ -23,6 +23,7 @@ import getAccountInfo from 'utils/getAccountInfo';
 import getActualSigners from 'utils/getActualSigners';
 import { fetchIpfsJsonData } from 'apis/ipfs';
 import { supabase } from 'util/supabase';
+import previewRing from '../assets/images/preview-ring-1.png';
 
 const AcceptRingRequestWrapper = styled.main`
   width: 100%;
@@ -86,7 +87,7 @@ const AcceptRingRequest = (): JSX.Element => {
           proposalPubKey={proposalPubKey!}
           proposerName={proposal?.your_name ?? ''}
           spouseName={proposal?.spouse_name ?? ''}
-          // proposerRing={snap.proposalInfo.data?.proposerRing ?? rings[0]}
+          proposerRing={previewRing}
           message={proposal?.message}
           signedBy={proposal?.your_wallet ?? ''}
           // qrCodeString={window.location.href}
